@@ -1,10 +1,12 @@
-import getAllProducts from "../data/product";
+import React from "react";
+import { useGetProductsQuery } from "../redux/api/productsApi";
 import CategoryCard from "./CategoryCard";
 
-const CategoryGrid = () => {
+const CategoryGrid: React.FC = () => {
+  const { data: products, error, isLoading } = useGetProductsQuery();
   const getUniqueCategories = (products) => {
     const categoryMap = new Map();
-    products.forEach((product) => {
+    products.products.forEach((product) => {
       if (!categoryMap.has(product.category)) {
         categoryMap.set(product.category, {
           name: product.category,
@@ -14,13 +16,15 @@ const CategoryGrid = () => {
     });
     return Array.from(categoryMap.values());
   };
-  const products = getAllProducts();
-  const categories = getUniqueCategories(products);
 
-  // Slicing the categories for different rows
-  const firstRow = categories.slice(0, 2); // First two categories
-  const secondRow = categories.slice(2, 3); // One category
-  const thirdRow = categories.slice(3, 5); // Next two categories
+  if (isLoading) return <p>Loading...</p>;
+  if (error) return <p>Error occurred: {error.message}</p>;
+
+  // Ensure products data is available before extracting categories
+  const categories = products ? getUniqueCategories(products) : [];
+  const firstRow = categories.slice(0, 2);
+  const secondRow = categories.slice(2, 3);
+  const thirdRow = categories.slice(3, 5);
 
   return (
     <div className="container mx-auto">

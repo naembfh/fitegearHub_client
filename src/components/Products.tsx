@@ -1,14 +1,15 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import getAllProducts from "../data/product";
+import { useGetProductsQuery } from "../redux/api/productsApi";
 import ProductCard from "./ProductCard";
 
-const Products = () => {
-  const allProducts = getAllProducts();
+const Products: React.FC = () => {
   const location = useLocation();
   const [selectedCategory, setSelectedCategory] = useState("All");
 
-  // Parse query parameters to get the selected category
+  const { data, error, isLoading } = useGetProductsQuery();
+  const products = data?.products || [];
+
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const category = params.get("category");
@@ -18,17 +19,20 @@ const Products = () => {
   }, [location]);
 
   // Get unique categories from products for the select dropdown
-  const categories = ["All", ...new Set(allProducts.map((p) => p.category))];
+  const categories = ["All", ...new Set(products.map((p) => p.category))];
 
   // Filter products based on the selected category
   const filteredProducts =
     selectedCategory === "All"
-      ? allProducts
-      : allProducts.filter((product) => product.category === selectedCategory);
+      ? products
+      : products.filter((product) => product.category === selectedCategory);
 
   const handleCategoryChange = (event) => {
     setSelectedCategory(event.target.value);
   };
+
+  if (isLoading) return <p>Loading...</p>;
+  if (error) return <p>Error occurred: {error.message}</p>;
 
   return (
     <div className="container">

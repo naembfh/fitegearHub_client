@@ -15,9 +15,7 @@ const Navbar = () => {
   return (
     <nav className="bg-indigo-900 text-white rounded-sm px-3">
       <div className="container mx-auto flex items-center justify-between py-4">
-        {/* Logo (Home Button) */}
         <Link to="/" className="flex items-center">
-          {/* Updated to Italian */}
           <span>Fitgear Hub</span>
         </Link>
 
