@@ -1,12 +1,18 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { toast } from "sonner";
+import { useAppSelector } from "../redux/hook";
 import CartModal from "./Cart";
 const Navbar = () => {
+  const { cartItems } = useAppSelector((store) => store.cart);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
 
   const handleCartToggle = () => {
     setIsCartOpen(!isCartOpen);
+    toast.success("🛒 Your cart will disappear if you refresh.", {
+      duration: 5000,
+    });
   };
   const handleMenuToggle = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -45,7 +51,7 @@ const Navbar = () => {
           >
             <i className="fi fi-rr-dolly-flatbed"></i>
             <span className="rounded-full absolute top-[-10px] left-[20px] bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center">
-              2
+              {cartItems.length}
             </span>
           </button>
 
@@ -101,11 +107,14 @@ const Navbar = () => {
             </li>
             {/* Cart Icon in Mobile Menu */}
             <li className="relative">
-              <button className="rounded-lg p-1 inline-block">
+              <button
+                className="rounded-lg p-1 inline-block"
+                onClick={handleCartToggle}
+              >
                 <i className="fi fi-rr-dolly-flatbed"></i>
               </button>
               <span className="rounded-full absolute top-[-10px] left-[20px] bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center">
-                2
+                {cartItems.length}
               </span>
             </li>
             {/* User Icon in Mobile Menu */}

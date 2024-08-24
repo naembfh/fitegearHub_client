@@ -1,4 +1,19 @@
+import { useDispatch, useSelector } from "react-redux";
+
+import { clearCart } from "../redux/features/cartSlice";
+import { RootState } from "../redux/store";
+import CartDetails from "./CartDetails";
+import OrderSummary from "./OrderSummary";
+
 const Cart = ({ isOpen, onClose }) => {
+  const dispatch = useDispatch();
+  const { cartItems, subtotal, taxAmount, totalAmount, totalItems } =
+    useSelector((state: RootState) => state.cart);
+
+  const handleClearCart = () => {
+    dispatch(clearCart());
+  };
+
   return (
     <div
       className={`fixed inset-0 bg-gray-800 bg-opacity-50 transition-opacity duration-300 ${
@@ -13,18 +28,24 @@ const Cart = ({ isOpen, onClose }) => {
       >
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-gray-600 hover:text-gray-900 z-70"
+          className="absolute top-4 right-4 text-indigo-600 hover:text-gray-700 z-70"
         >
-          <i className="fi fi-rr-x"></i>
+          <i className="fi fi-rr-cross-circle text-4xl"></i>
         </button>
-        {/* Modal content */}
-        <h2 className="text-xl text-red-500 font-bold mb-4">Your Cart</h2>
-        <h2 className="text-xl text-red-500 font-bold mb-4">Your Cart</h2>
-        <h2 className="text-xl text-red-500 font-bold mb-4">Your Cart</h2>
-        <h2 className="text-xl font-bold mb-4">Your Cart</h2>
-        <h2 className="text-xl font-bold mb-4">Your Cart</h2>
-        <h2 className="text-xl font-bold mb-4">Your Cart</h2>
-        {/* Add cart items here */}
+        <div className="mt-12 lg:grid grid-cols-5 gap-4">
+          <div className="col-span-3">
+            <CartDetails cartItems={cartItems} />
+          </div>
+          <div className="col-span-2">
+            <OrderSummary
+              subtotal={subtotal}
+              taxAmount={taxAmount}
+              totalAmount={totalAmount}
+              totalItems={totalItems}
+              handleClearCart={handleClearCart}
+            />
+          </div>
+        </div>
       </div>
     </div>
   );
