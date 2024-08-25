@@ -1,10 +1,16 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-import { useAppSelector } from "../redux/hook";
+import { logout } from "../redux/features/authSlice";
+import { useAppDispatch, useAppSelector } from "../redux/hook";
 import CartModal from "./Cart";
+
 const Navbar = () => {
   const { cartItems } = useAppSelector((store) => store.cart);
+  const { user } = useAppSelector((store) => store.auth);
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
 
@@ -14,8 +20,24 @@ const Navbar = () => {
       duration: 5000,
     });
   };
+
   const handleMenuToggle = () => {
     setIsMenuOpen(!isMenuOpen);
+  };
+
+  const handleLoginLogout = () => {
+    if (user) {
+      dispatch(logout());
+      toast.success("Logged out successfully");
+    } else {
+      navigate("/login", { state: { from: location.pathname } });
+    }
+  };
+
+  const handleLoginSuccess = () => {
+    toast.success("Logged in successfully");
+    const { from } = location.state || { from: "/" };
+    navigate(from);
   };
 
   return (
@@ -25,7 +47,6 @@ const Navbar = () => {
           <span>Fitgear Hub</span>
         </Link>
 
-        {/* Desktop Menu */}
         <div className="hidden md:flex flex-grow items-center justify-center space-x-5">
           <ul className="flex items-center space-x-5">
             <li>
@@ -42,9 +63,7 @@ const Navbar = () => {
           </ul>
         </div>
 
-        {/* Icons (Cart and User) */}
         <div className="hidden md:flex items-center space-x-5">
-          {/* Cart Icon */}
           <button
             className="rounded-lg p-1 inline-block relative"
             onClick={handleCartToggle}
@@ -55,13 +74,18 @@ const Navbar = () => {
             </span>
           </button>
 
-          {/* User Icon */}
-          <button className="rounded-lg p-1 inline-block">
-            <i className="fi fi-rr-circle-user"></i>
+          <button
+            onClick={handleLoginLogout}
+            className="rounded-lg p-1 inline-block"
+          >
+            <i
+              className={`fi ${
+                user ? "fi fi-rr-sign-out-alt" : "fi-rr-circle-user"
+              }`}
+            ></i>
           </button>
         </div>
 
-        {/* Mobile Menu Button */}
         <div className="md:hidden flex items-center">
           <button
             onClick={handleMenuToggle}
@@ -95,7 +119,6 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile Menu */}
       {isMenuOpen && (
         <div className="md:hidden">
           <ul className="flex flex-col items-center space-y-5 mt-4">
@@ -105,7 +128,6 @@ const Navbar = () => {
             <li>
               <span className="rounded-lg p-1 inline-block">About</span>
             </li>
-            {/* Cart Icon in Mobile Menu */}
             <li className="relative">
               <button
                 className="rounded-lg p-1 inline-block"
@@ -117,16 +139,22 @@ const Navbar = () => {
                 {cartItems.length}
               </span>
             </li>
-            {/* User Icon in Mobile Menu */}
             <li>
-              <button className="rounded-lg p-1 inline-block">
-                <i className="fi fi-rr-circle-user"></i>
+              <button
+                onClick={handleLoginLogout}
+                className="rounded-lg p-1 inline-block"
+              >
+                <i
+                  className={`fi ${
+                    user ? "fi fi-rr-sign-out-alt" : "fi-rr-circle-user"
+                  }`}
+                ></i>
               </button>
             </li>
           </ul>
         </div>
       )}
-      {/* Cart Modal */}
+
       <CartModal isOpen={isCartOpen} onClose={handleCartToggle} />
     </nav>
   );

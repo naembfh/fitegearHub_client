@@ -1,10 +1,30 @@
-const OrderSummary = ({
+import React from "react";
+import { useNavigate } from "react-router-dom";
+
+interface OrderSummaryProps {
+  subtotal: number;
+  taxAmount: number;
+  totalAmount: number;
+  totalItems: number;
+  handleClearCart: () => void;
+}
+
+const OrderSummary: React.FC<OrderSummaryProps> = ({
   subtotal,
   taxAmount,
   totalAmount,
   totalItems,
   handleClearCart,
 }) => {
+  const navigate = useNavigate();
+  const isCartEmpty = totalItems === 0;
+
+  const handleProceedToCheckout = () => {
+    if (!isCartEmpty) {
+      navigate("/checkout");
+    }
+  };
+
   return (
     <div className="lg:w-60 w-full h-full bg-primary bg-opacity-35 border border-gray-300 rounded-lg p-4 text-gray-600">
       <div className="px-6 py-4 space-y-10">
@@ -27,13 +47,13 @@ const OrderSummary = ({
           <i className="fi fi-rr-trash"></i>
         </button>
         <button
-          onClick={(e) => {
-            e.stopPropagation();
-            // Proceed to checkout logic
-          }}
-          className="bg-indigo-600 px-3 py-2 text-white mt-2 rounded-md w-full text-xs flex justify-between items-center"
+          onClick={handleProceedToCheckout}
+          className={`bg-indigo-600 px-3 py-2 text-white mt-2 rounded-md w-full text-xs flex justify-between items-center ${
+            isCartEmpty ? "opacity-50 cursor-not-allowed" : ""
+          }`}
+          disabled={isCartEmpty}
         >
-          <span>Proceed to Checkout</span>
+          <span>{isCartEmpty ? "Cart is Empty" : "Proceed to Checkout"}</span>
           <i className="fi fi-rr-credit-card"></i>
         </button>
       </div>

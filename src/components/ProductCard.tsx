@@ -1,15 +1,14 @@
-import { toast } from "sonner";
-import { addToCart } from "../redux/features/cartSlice";
-import { useAppDispatch } from "../redux/hook";
+import { useNavigate } from "react-router-dom";
+import { useAppSelector } from "../redux/hook";
 
-const ProductCart = ({ product }: { product: any }) => {
-  const dispatch = useAppDispatch();
+const ProductCart = ({ product }) => {
+  const navigate = useNavigate();
+  const cartItems = useAppSelector((state) => state.cart.cartItems);
+  const cartItem = cartItems.find((item) => item.id === product.id);
+  const isAddToCartDisabled = cartItem && cartItem.quantity >= product.stock;
 
-  const handleAddToCart = () => {
-    dispatch(addToCart(product));
-    toast.success("Item added to cart!", {
-      duration: 2000,
-    });
+  const handleViewDetails = () => {
+    navigate(`/products/${product.id}`);
   };
 
   return (
@@ -29,10 +28,10 @@ const ProductCart = ({ product }: { product: any }) => {
             ${product.price.toFixed(2)}
           </p>
           <button
-            onClick={handleAddToCart}
+            onClick={handleViewDetails}
             className="bg-indigo-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-indigo-800 transition duration-300 shadow-md hover:shadow-lg"
           >
-            Add to Cart
+            View Details
           </button>
         </div>
       </div>
