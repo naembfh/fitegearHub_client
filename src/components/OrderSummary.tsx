@@ -7,6 +7,7 @@ interface OrderSummaryProps {
   totalAmount: number;
   totalItems: number;
   handleClearCart: () => void;
+  onProceedToCheckout: () => void; // New prop
 }
 
 const OrderSummary: React.FC<OrderSummaryProps> = ({
@@ -15,12 +16,14 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
   totalAmount,
   totalItems,
   handleClearCart,
+  onProceedToCheckout,
 }) => {
   const navigate = useNavigate();
   const isCartEmpty = totalItems === 0;
 
-  const handleProceedToCheckout = () => {
+  const handleCheckoutClick = () => {
     if (!isCartEmpty) {
+      onProceedToCheckout(); // Hide cart modal
       navigate("/checkout");
     }
   };
@@ -47,7 +50,7 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
           <i className="fi fi-rr-trash"></i>
         </button>
         <button
-          onClick={handleProceedToCheckout}
+          onClick={handleCheckoutClick}
           className={`bg-indigo-600 px-3 py-2 text-white mt-2 rounded-md w-full text-xs flex justify-between items-center ${
             isCartEmpty ? "opacity-50 cursor-not-allowed" : ""
           }`}

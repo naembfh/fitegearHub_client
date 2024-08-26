@@ -1,5 +1,3 @@
-// src/api/authApi.js
-
 import { setUser } from "../features/authSlice";
 import { baseApi } from "./baseApi";
 

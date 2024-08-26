@@ -1,14 +1,16 @@
-// Import necessary components and libraries
 import { createBrowserRouter } from "react-router-dom";
 import App from "../App";
-import Products from "../components/Products";
-
 import CheckoutPage from "../components/CheckoutPage";
 import ProductDetails from "../components/ProductDetails";
+import Products from "../components/Products";
+
+import MyOrders from "../components/MyOrder";
+import OrderConfirmation from "../components/OrderConfirmation";
+import ProductManagement from "../components/ProductManagement";
 import Home from "../pages/Home";
 import LoginForm from "../pages/Login";
+import ProtectedRoute from "./ProtectedRoute";
 
-// Define the routes
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -29,6 +31,26 @@ export const router = createBrowserRouter([
       {
         path: "checkout",
         element: <CheckoutPage />,
+      },
+      {
+        path: "my-orders",
+        element: (
+          <ProtectedRoute>
+            <MyOrders />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "management",
+        element: (
+          <ProtectedRoute>
+            <ProductManagement></ProductManagement>
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "order-confirmation",
+        element: <OrderConfirmation />,
       },
     ],
   },

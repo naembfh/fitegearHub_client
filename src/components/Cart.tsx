@@ -1,5 +1,4 @@
 import { useDispatch, useSelector } from "react-redux";
-
 import { clearCart } from "../redux/features/cartSlice";
 import { RootState } from "../redux/store";
 import CartDetails from "./CartDetails";
@@ -12,6 +11,10 @@ const Cart = ({ isOpen, onClose }) => {
 
   const handleClearCart = () => {
     dispatch(clearCart());
+  };
+
+  const handleProceedToCheckout = () => {
+    onClose(); // Close the cart modal
   };
 
   return (
@@ -43,6 +46,7 @@ const Cart = ({ isOpen, onClose }) => {
               totalAmount={totalAmount}
               totalItems={totalItems}
               handleClearCart={handleClearCart}
+              onProceedToCheckout={handleProceedToCheckout}
             />
           </div>
         </div>

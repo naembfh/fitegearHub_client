@@ -1,4 +1,3 @@
-// productsApi.ts
 import { baseApi } from "./baseApi";
 
 export const productsApi = baseApi.injectEndpoints({

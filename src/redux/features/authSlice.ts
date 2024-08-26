@@ -1,5 +1,3 @@
-// src/features/authSlice.js
-
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { jwtDecode } from "jwt-decode";
 

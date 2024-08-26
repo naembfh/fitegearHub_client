@@ -7,7 +7,7 @@ import CartModal from "./Cart";
 
 const Navbar = () => {
   const { cartItems } = useAppSelector((store) => store.cart);
-  const { user } = useAppSelector((store) => store.auth);
+  const user = useAppSelector((store) => store.auth.user); // Access user directly from state
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const location = useLocation();
@@ -60,6 +60,26 @@ const Navbar = () => {
             <li>
               <span className="rounded-lg p-1 inline-block">About</span>
             </li>
+            {user && user.role === "admin" && (
+              <li>
+                <Link
+                  className="rounded-lg backdrop-blur-[2px] p-1 inline-block"
+                  to={"/management"}
+                >
+                  Management
+                </Link>
+              </li>
+            )}
+            {user && (
+              <li>
+                <Link
+                  className="rounded-lg backdrop-blur-[2px] p-1 inline-block"
+                  to={"/my-orders"}
+                >
+                  My Orders
+                </Link>
+              </li>
+            )}
           </ul>
         </div>
 
@@ -128,6 +148,23 @@ const Navbar = () => {
             <li>
               <span className="rounded-lg p-1 inline-block">About</span>
             </li>
+            {user && user.role === "admin" && (
+              <li>
+                <Link
+                  className="rounded-lg p-1 inline-block"
+                  to={"/management"}
+                >
+                  Management
+                </Link>
+              </li>
+            )}
+            {user && (
+              <li>
+                <Link className="rounded-lg p-1 inline-block" to={"/my-orders"}>
+                  My Orders
+                </Link>
+              </li>
+            )}
             <li className="relative">
               <button
                 className="rounded-lg p-1 inline-block"
