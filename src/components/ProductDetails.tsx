@@ -5,13 +5,15 @@ import { addToCart } from "../redux/features/cartSlice";
 import { useAppDispatch, useAppSelector } from "../redux/hook";
 
 const ProductDetails = () => {
-  const { id } = useParams();
+  const { id } = useParams<{ id?: string }>();
   const dispatch = useAppDispatch();
-  let { data: product, error, isLoading } = useGetProductByIdQuery(id);
-  product = product?.product;
-  console.log(product);
+  const { data, error, isLoading } = useGetProductByIdQuery(id ?? "");
+  const product = data?.product;
+
   const cartItems = useAppSelector((state) => state.cart.cartItems);
-  const cartItem = cartItems.find((item) => item.id === Number(id));
+
+  const cartItem = cartItems.find((item) => item.id === id);
+
   const isAddToCartDisabled =
     cartItem && product && cartItem.quantity >= product.stock;
 
@@ -21,7 +23,12 @@ const ProductDetails = () => {
         duration: 2000,
       });
     } else {
-      dispatch(addToCart(product));
+      dispatch(
+        addToCart({
+          ...product!,
+          quantity: 1, // Default quantity to 1
+        })
+      );
       toast.success("Item added to cart!", {
         duration: 2000,
       });
@@ -34,34 +41,21 @@ const ProductDetails = () => {
 
   return (
     <div className="container mx-auto p-4">
-      <div className="flex flex-col md:flex-row justify-center items-center border-2 border-indigo-700 p-4">
-        <div className="w-full md:w-1/2 p-4">
-          <img
-            src={product.image}
-            alt={product.name}
-            className="w-full h-64 object-cover border border-indigo-700"
-          />
+      <div className="flex flex-col md:flex-row justify-center items-center border-2 border-gray-200 shadow-xl rounded-xl p-4">
+        <div className="md:w-1/2">
+          <img src={product.imageUrl} alt={product.name} className="w-full" />
         </div>
-        <div className="w-full md:w-1/2 p-4">
-          <h2 className="text-2xl font-bold text-indigo-700 mb-4">
-            {product.name}
-          </h2>
-          <p className="text-lg text-gray-700 mb-4">{product.description}</p>
-          <p className="text-lg font-bold text-indigo-600 mb-4">
-            ${product.price ? product.price.toFixed(2) : "N/A"}
-          </p>
-          <p className="text-sm text-gray-600 mb-4">
-            Category: {product.category}
-          </p>
-          <p className="text-sm text-gray-600 mb-4">
-            In Stock: {product.stock}
-          </p>
+        <div className="md:w-1/2 p-4">
+          <h1 className="text-3xl font-bold mb-4">{product.name}</h1>
+          <p className="text-xl mb-4">{product.description}</p>
+          <p className="text-lg font-semibold mb-4">Price: ${product.price}</p>
+          <p className="text-sm mb-4">Stock: {product.stock}</p>
           <button
             onClick={handleAddToCart}
-            className={`bg-indigo-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-indigo-800 transition duration-300 shadow-md hover:shadow-lg ${
-              isAddToCartDisabled ? "opacity-50 cursor-not-allowed" : ""
-            }`}
             disabled={isAddToCartDisabled}
+            className={`py-2 px-4 rounded-lg text-white ${
+              isAddToCartDisabled ? "bg-gray-400" : "bg-blue-500"
+            }`}
           >
             {isAddToCartDisabled ? "Out of Stock" : "Add to Cart"}
           </button>

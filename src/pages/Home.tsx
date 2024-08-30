@@ -1,7 +1,10 @@
 import Banner from "../components/Banner";
+import BenefitsSection from "../components/BenefitsSection";
 import CategoryGrid from "../components/CategoryGrid";
 import Container from "../components/Container";
-import Products from "../components/Products";
+import FeaturedProducts from "../components/FeaturedProducts";
+import Footer from "../components/Footer";
+import ImageGallery from "../components/ImageGallery";
 
 export default function Home() {
   return (
@@ -9,8 +12,11 @@ export default function Home() {
       <Banner></Banner>
       <Container>
         <CategoryGrid></CategoryGrid>
-        <Products></Products>
+        <FeaturedProducts></FeaturedProducts>
+        <BenefitsSection></BenefitsSection>
+        <ImageGallery></ImageGallery>
       </Container>
+      <Footer></Footer>
     </>
   );
 }

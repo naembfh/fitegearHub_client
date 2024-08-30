@@ -1,19 +1,18 @@
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-
 import { useGetOrdersByEmailQuery } from "../redux/api/orderApi";
 import { selectCurrentUser } from "../redux/features/authSlice";
 
 const MyOrders = () => {
   const user = useSelector(selectCurrentUser);
-  const navigate = useNavigate();
+  // Remove navigate if not used
+  // const navigate = useNavigate();
 
   // Fetch orders by user email using RTK Query
   const {
     data: orders,
     error,
     isLoading,
-  } = useGetOrdersByEmailQuery(user?.email);
+  } = useGetOrdersByEmailQuery(user?.email ?? "");
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -52,7 +51,7 @@ const MyOrders = () => {
             ))
           ) : (
             <tr>
-              <td colSpan="4" className="py-4 text-center">
+              <td colSpan={4} className="py-4 text-center">
                 No orders found.
               </td>
             </tr>

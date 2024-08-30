@@ -51,7 +51,7 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
         </button>
         <button
           onClick={handleCheckoutClick}
-          className={`bg-indigo-600 px-3 py-2 text-white mt-2 rounded-md w-full text-xs flex justify-between items-center ${
+          className={`bg-gray-900 hover:bg-gray-100 text-white hover:text-gray-900 hover:border border-2 border-gray-900 font-bold py-2 px-4 rounded w-full text-xs flex justify-between items-center ${
             isCartEmpty ? "opacity-50 cursor-not-allowed" : ""
           }`}
           disabled={isCartEmpty}

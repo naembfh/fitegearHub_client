@@ -4,7 +4,13 @@ import { RootState } from "../redux/store";
 import CartDetails from "./CartDetails";
 import OrderSummary from "./OrderSummary";
 
-const Cart = ({ isOpen, onClose }) => {
+// Define props type
+interface CartProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+const Cart = ({ isOpen, onClose }: CartProps) => {
   const dispatch = useDispatch();
   const { cartItems, subtotal, taxAmount, totalAmount, totalItems } =
     useSelector((state: RootState) => state.cart);
@@ -14,7 +20,7 @@ const Cart = ({ isOpen, onClose }) => {
   };
 
   const handleProceedToCheckout = () => {
-    onClose(); // Close the cart modal
+    onClose();
   };
 
   return (
@@ -31,7 +37,7 @@ const Cart = ({ isOpen, onClose }) => {
       >
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-indigo-600 hover:text-gray-700 z-70"
+          className="absolute top-4 right-4 text-gray-500 hover:text-gray-900 z-70"
         >
           <i className="fi fi-rr-cross-circle text-4xl"></i>
         </button>

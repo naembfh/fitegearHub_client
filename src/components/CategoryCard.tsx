@@ -1,6 +1,18 @@
+import React from "react";
 import { useNavigate } from "react-router-dom";
 
-const CategoryCard = ({ category }) => {
+// Define the Category type
+interface Category {
+  name: string;
+  image: string;
+}
+
+// Define the props interface
+interface CategoryCardProps {
+  category: Category;
+}
+
+const CategoryCard: React.FC<CategoryCardProps> = ({ category }) => {
   const navigate = useNavigate();
 
   const handleShopNow = () => {
@@ -22,7 +34,7 @@ const CategoryCard = ({ category }) => {
         </h3>
         <button
           onClick={handleShopNow}
-          className="bg-indigo-700 text-white font-semibold py-2 px-4 rounded-lg hover:bg-indigo-900 transition duration-300 shadow-md hover:shadow-lg"
+          className="bg-gray-900 hover:bg-gray-100 text-white hover:text-gray-900 hover:border border-2 border-gray-900 font-bold py-2 px-4 rounded"
         >
           Shop Now
         </button>

@@ -1,16 +1,19 @@
 import React from "react";
 import { useGetProductsQuery } from "../redux/api/productsApi";
+import { Product, ProductsResponse } from "../types/types";
 import CategoryCard from "./CategoryCard";
 
 const CategoryGrid: React.FC = () => {
-  const { data: products, error, isLoading } = useGetProductsQuery();
-  const getUniqueCategories = (products) => {
-    const categoryMap = new Map();
-    products.products.forEach((product) => {
+  const { data, error, isLoading } = useGetProductsQuery();
+
+  const getUniqueCategories = (products: Product[]) => {
+    const categoryMap = new Map<string, { name: string; image: string }>();
+
+    products.forEach((product: Product) => {
       if (!categoryMap.has(product.category)) {
         categoryMap.set(product.category, {
           name: product.category,
-          image: product.categoryImage,
+          image: product.categoryImage || "default-image-url.jpg",
         });
       }
     });
@@ -18,10 +21,21 @@ const CategoryGrid: React.FC = () => {
   };
 
   if (isLoading) return <p>Loading...</p>;
-  if (error) return <p>Error occurred: {error.message}</p>;
 
-  // Ensure products data is available before extracting categories
-  const categories = products ? getUniqueCategories(products) : [];
+  if (error) {
+    const errorMessage =
+      "status" in error
+        ? `Error occurred: ${error.status}`
+        : "Unknown error occurred";
+    return <p>{errorMessage}</p>;
+  }
+
+  // Ensure data is of type ProductsResponse and handle it
+  const productsResponse = data as ProductsResponse;
+  const categories = productsResponse
+    ? getUniqueCategories(productsResponse.products)
+    : [];
+
   const firstRow = categories.slice(0, 2);
   const secondRow = categories.slice(2, 3);
   const thirdRow = categories.slice(3, 5);

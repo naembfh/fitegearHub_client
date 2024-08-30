@@ -1,11 +1,12 @@
+import { Product, ProductsResponse } from "../../types/types";
 import { baseApi } from "./baseApi";
 
 export const productsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getProducts: builder.query<Product[], void>({
+    getProducts: builder.query<ProductsResponse, void>({
       query: () => "products",
     }),
-    getProductById: builder.query<Product, string>({
+    getProductById: builder.query<{ product: Product }, string>({
       query: (id) => `products/${id}`,
     }),
     addProduct: builder.mutation<Product, Partial<Product>>({

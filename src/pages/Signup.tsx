@@ -1,34 +1,70 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-import { useLoginMutation } from "../redux/api/authApi";
+import { useSignUpMutation } from "../redux/api/authApi";
 
-const LoginForm = () => {
+const SignUpForm = () => {
   const [username, setUsername] = useState("");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [login, { isLoading }] = useLoginMutation();
+  const [signUp, { isLoading }] = useSignUpMutation();
   const navigate = useNavigate();
 
   // Specify the type for the event parameter
-  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      await login({ username, password }).unwrap(); // Removed the unused 'result' variable
-      toast.success("Logged in successfully");
-      navigate("/");
+      await signUp({ username, name, email, password }).unwrap();
+      toast.success("Sign up successful, please log in.");
+      navigate("/login");
     } catch (error) {
-      console.error("Login failed:", error);
-      toast.error("Login failed, please check your credentials.");
+      console.error("Sign up failed:", error);
+      toast.error("Sign up failed, please try again.");
     }
   };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <form
-        onSubmit={handleLogin}
+        onSubmit={handleSignUp}
         className="w-1/3 max-w-sm p-6 bg-white rounded-md shadow-md"
       >
-        <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
+        <h2 className="text-2xl font-bold mb-6 text-center">Sign Up</h2>
+        <div className="mb-4">
+          <label
+            className="block text-gray-700 text-sm font-bold mb-2"
+            htmlFor="name"
+          >
+            Name
+          </label>
+          <input
+            type="text"
+            id="name"
+            placeholder="Enter your name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className="w-full px-3 py-2 border rounded-md text-gray-700 focus:outline-none focus:border-indigo-500"
+            required
+          />
+        </div>
+        <div className="mb-4">
+          <label
+            className="block text-gray-700 text-sm font-bold mb-2"
+            htmlFor="email"
+          >
+            Email
+          </label>
+          <input
+            type="email"
+            id="email"
+            placeholder="Enter your email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-full px-3 py-2 border rounded-md text-gray-700 focus:outline-none focus:border-indigo-500"
+            required
+          />
+        </div>
         <div className="mb-4">
           <label
             className="block text-gray-700 text-sm font-bold mb-2"
@@ -71,20 +107,12 @@ const LoginForm = () => {
             }`}
             disabled={isLoading}
           >
-            {isLoading ? "Logging in..." : "Login"}
+            {isLoading ? "Signing up..." : "Sign Up"}
           </button>
-        </div>
-        <div className="mt-4 text-center">
-          <p>
-            Don’t have an account?{" "}
-            <Link to="/signup" className="text-gray-500 hover:text-gray-900">
-              Sign Up
-            </Link>
-          </p>
         </div>
       </form>
     </div>
   );
 };
 
-export default LoginForm;
+export default SignUpForm;

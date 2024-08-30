@@ -34,14 +34,18 @@ const Navbar = () => {
     }
   };
 
-  const handleLoginSuccess = () => {
-    toast.success("Logged in successfully");
-    const { from } = location.state || { from: "/" };
-    navigate(from);
-  };
+  // const handleLoginSuccess = () => {
+  //   toast.success("Logged in successfully");
+  //   const { from } = location.state || { from: "/" };
+  //   navigate(from);
+  // };
+
+  // Example usage: if you have a login action, use handleLoginSuccess there
+  // You might use handleLoginSuccess in a login component or after authentication
+  // Example: if (loginSuccess) handleLoginSuccess();
 
   return (
-    <nav className="bg-indigo-900 text-white rounded-sm px-3">
+    <nav className="bg-gray-900 text-white rounded-sm px-3">
       <div className="container mx-auto flex items-center justify-between py-4">
         <Link to="/" className="flex items-center">
           <span>Fitgear Hub</span>
@@ -58,7 +62,12 @@ const Navbar = () => {
               </Link>
             </li>
             <li>
-              <span className="rounded-lg p-1 inline-block">About</span>
+              <Link
+                className="rounded-lg backdrop-blur-[2px] p-1 inline-block"
+                to={"/about"}
+              >
+                About
+              </Link>
             </li>
             {user && user.role === "admin" && (
               <li>

@@ -1,7 +1,24 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-const initialState = {
-  cartItems: [] as any[],
+interface CartItem {
+  id: string;
+  name: string;
+  price: number;
+  quantity: number;
+  imageUrl: string;
+}
+
+interface CartState {
+  cartItems: CartItem[];
+  totalItems: number;
+  subtotal: number;
+  taxAmount: number;
+  taxPercentage: number;
+  totalAmount: number;
+}
+
+const initialState: CartState = {
+  cartItems: [],
   totalItems: 0,
   subtotal: 0,
   taxAmount: 0,
@@ -13,7 +30,7 @@ export const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
-    addToCart: (state, action) => {
+    addToCart: (state, action: PayloadAction<CartItem>) => {
       const existingProduct = state.cartItems.find(
         (item) => item.id === action.payload.id
       );
@@ -30,7 +47,6 @@ export const cartSlice = createSlice({
       state.taxAmount = calculateTaxAmount(state);
       state.totalAmount = calculateTotalAmount(state);
       console.log(state.subtotal);
-
       console.log(JSON.stringify(state));
     },
     updateQuantity: (
@@ -74,23 +90,23 @@ export const cartSlice = createSlice({
   },
 });
 
-export const calculateTotalItems = (state) => {
-  return state.cartItems.reduce((total: number, item: any) => {
+export const calculateTotalItems = (state: CartState) => {
+  return state.cartItems.reduce((total: number, item) => {
     return total + item.quantity;
   }, 0);
 };
 
-export const calculateSubtotal = (state) => {
-  return state.cartItems.reduce((total: number, item: any) => {
+export const calculateSubtotal = (state: CartState) => {
+  return state.cartItems.reduce((total: number, item) => {
     return total + item.price * item.quantity;
   }, 0);
 };
 
-export const calculateTaxAmount = (state) => {
+export const calculateTaxAmount = (state: CartState) => {
   return state.subtotal * state.taxPercentage;
 };
 
-export const calculateTotalAmount = (state) => {
+export const calculateTotalAmount = (state: CartState) => {
   return state.subtotal + state.taxAmount;
 };
 

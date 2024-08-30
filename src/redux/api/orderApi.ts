@@ -1,18 +1,6 @@
 import { baseApi } from "./baseApi";
 
-interface Order {
-  id: string;
-  name: string;
-  email: string;
-  phone: string;
-  address: string;
-  items: Array<{
-    productId: string;
-    quantity: number;
-  }>;
-  totalAmount: number;
-  paymentMethod: "cod" | "stripe";
-}
+import { Order } from "../../types/types";
 
 export const orderApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({

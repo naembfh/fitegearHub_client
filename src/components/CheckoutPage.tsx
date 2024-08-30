@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-
-import { useCreateOrderMutation } from "../redux/api/orderApi.ts";
-import { clearCart } from "../redux/features/cartSlice.ts";
+import { useCreateOrderMutation } from "../redux/api/orderApi";
+import { clearCart } from "../redux/features/cartSlice";
 import { RootState } from "../redux/store";
+import { TUser } from "../types/types";
 import CartDetails from "./CartDetails";
 
 interface UserDetails {
@@ -21,7 +21,9 @@ const CheckoutPage: React.FC = () => {
   const { cartItems, subtotal, taxAmount, totalAmount } = useSelector(
     (state: RootState) => state.cart
   );
-  const user = useSelector((state: RootState) => state.auth.user);
+  const user = useSelector(
+    (state: RootState) => state.auth.user as TUser | null
+  );
   const [createOrder] = useCreateOrderMutation();
 
   const [userDetails, setUserDetails] = useState<UserDetails>({
@@ -50,8 +52,8 @@ const CheckoutPage: React.FC = () => {
       setUserDetails({
         name: user.name,
         email: user.email,
-        phone: user.phone,
-        address: user.address,
+        phone: user.phone || "",
+        address: user.address || "",
       });
     }
   }, [user]);
@@ -95,7 +97,10 @@ const CheckoutPage: React.FC = () => {
       email: userDetails.email,
       phone: userDetails.phone,
       address: userDetails.address,
-      items: cartItems,
+      items: cartItems.map((item) => ({
+        productId: item.id,
+        quantity: item.quantity,
+      })),
       totalAmount,
       paymentMethod,
     };
@@ -208,7 +213,7 @@ const CheckoutPage: React.FC = () => {
         </label>
         <button
           onClick={handlePlaceOrder}
-          className="bg-indigo-600 px-4 py-2 text-white rounded-md"
+          className="w-full p-2 bg-blue-500 text-white rounded-md"
         >
           Place Order
         </button>

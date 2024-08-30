@@ -11,7 +11,7 @@ const OrderConfirmation = () => {
       </p>
       <button
         onClick={() => navigate("/my-orders")}
-        className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
+        className="bg-gray-900 hover:bg-gray-100 text-white hover:text-gray-900 hover:border border-2 border-gray-900 font-bold py-2 px-4 rounded"
       >
         View My Orders
       </button>
